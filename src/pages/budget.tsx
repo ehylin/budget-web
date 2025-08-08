@@ -4,8 +4,9 @@ import { auth } from "../lib/firebase";
 import { useBudget } from "../hooks/useBudget";
 import "firebase/compat/auth";
 import { BudgetForm } from "../components/BudgetForm";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, DocumentSnapshot, getDoc } from "firebase/firestore";
 import { db } from "../lib/firebase";
+import type { BudgetMonth } from "../types/generics";
 
 function prevYm(ym: string) {
   const [y, m] = ym.split("-").map(Number);
@@ -26,12 +27,11 @@ export default function BudgetPage() {
     try {
       const p = prevYm(ym);
       const ref = doc(db, "users", user.uid, "budgets", p);
-      const snap = await getDoc(ref);
+      const snap = (await getDoc(ref)) as DocumentSnapshot<BudgetMonth>;
       if (!snap.exists()) {
         alert(`No hay datos en ${p}`);
       } else {
-        // usa el save del hook para guardar en el mes actual
-        await save(snap.data() as any); // el hook ya fija el doc en {ym} actual
+        await save(snap.data());
       }
     } finally {
       setDupLoading(false);

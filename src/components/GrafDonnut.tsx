@@ -1,12 +1,5 @@
-import React, { useMemo } from "react";
-import {
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Tooltip,
-  Cell,
-  Legend,
-} from "recharts";
+import { useMemo } from "react";
+import { ResponsiveContainer, PieChart, Pie, Tooltip, Cell } from "recharts";
 import type { Row } from "../types/generics";
 
 const COLORS = ["#00C49F", "#FF8042", "#FF6384", "#8884D8", "#36A2EB"];

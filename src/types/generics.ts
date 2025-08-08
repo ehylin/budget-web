@@ -6,3 +6,9 @@ export type BudgetMonth = {
   totals: { income: number; expense: number; remaining: number };
   createdAt?: number;
 };
+
+export type Budget = {
+  income: number;
+  expenses: Row[];
+  remaining: number;
+};
