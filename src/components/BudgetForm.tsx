@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import type { BudgetMonth } from "../types/generics";
+import ExpensesDonut from "./GrafDonnut";
 
 const empty: BudgetMonth = {
   incomes: [
@@ -24,6 +25,8 @@ export function BudgetForm({
   onSave: (b: BudgetMonth) => Promise<void>;
 }) {
   const [model, setModel] = useState<BudgetMonth>(initial ?? empty);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState<null | "ok" | "error">(null);
 
   useEffect(() => {
     setModel(initial ?? empty);
@@ -48,7 +51,17 @@ export function BudgetForm({
     setModel((m) => ({ ...m, [type]: [...m[type], { label: "", amount: 0 }] }));
 
   const save = async () => {
-    await onSave({ ...model, totals });
+    setSaving(true);
+    setSaved(null);
+    try {
+      await onSave({ ...model, totals });
+      setSaved("ok");
+    } catch {
+      setSaved("error");
+    } finally {
+      setSaving(false);
+      setTimeout(() => setSaved(null), 2000); // ocultar banner
+    }
   };
 
   return (
@@ -135,11 +148,27 @@ export function BudgetForm({
           <Stat label="Gastos" value={totals.expense} />
           <Stat label="Restante" value={totals.remaining} />
         </div>
+
+        <div className="mt-6">
+          <ExpensesDonut expenses={model.expenses} />
+        </div>
+
+        {saved === "ok" && (
+          <div className="mt-4 rounded-md bg-green-50 text-green-700 px-3 py-2">
+            Datos guardados correctamente.
+          </div>
+        )}
+        {saved === "error" && (
+          <div className="mt-4 rounded-md bg-red-50 text-red-700 px-3 py-2">
+            Error al guardar. Intenta de nuevo.
+          </div>
+        )}
+
         <button
           className="mt-6 px-4 py-2 rounded bg-black text-white"
           onClick={save}
         >
-          Guardar mes
+          {saving ? "Guardando…" : "Guardar mes"}
         </button>
       </section>
     </div>

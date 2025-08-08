@@ -4,11 +4,39 @@ import { auth } from "../lib/firebase";
 import { useBudget } from "../hooks/useBudget";
 import "firebase/compat/auth";
 import { BudgetForm } from "../components/BudgetForm";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../lib/firebase";
+
+function prevYm(ym: string) {
+  const [y, m] = ym.split("-").map(Number);
+  const d = new Date(y, m - 1, 1);
+  d.setMonth(d.getMonth() - 1);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+}
 
 export default function BudgetPage() {
   const [user] = useAuthState(auth);
   const [ym, setYm] = useState(new Date().toISOString().slice(0, 7));
   const { data, save, loading } = useBudget(user?.uid, ym);
+  const [dupLoading, setDupLoading] = useState(false);
+
+  const duplicateFromPrevious = async () => {
+    if (!user) return;
+    setDupLoading(true);
+    try {
+      const p = prevYm(ym);
+      const ref = doc(db, "users", user.uid, "budgets", p);
+      const snap = await getDoc(ref);
+      if (!snap.exists()) {
+        alert(`No hay datos en ${p}`);
+      } else {
+        // usa el save del hook para guardar en el mes actual
+        await save(snap.data() as any); // el hook ya fija el doc en {ym} actual
+      }
+    } finally {
+      setDupLoading(false);
+    }
+  };
 
   return (
     <div className="mx-auto max-w-5xl p-6">
@@ -21,6 +49,18 @@ export default function BudgetPage() {
           className="border rounded px-2 py-1"
         />
       </div>
+
+      {user && (
+        <div className="mt-3">
+          <button
+            className="border px-3 py-1 rounded disabled:opacity-50"
+            onClick={duplicateFromPrevious}
+            disabled={dupLoading}
+          >
+            {dupLoading ? "Duplicando…" : "Duplicar mes anterior"}
+          </button>
+        </div>
+      )}
 
       {!user ? (
         <p className="mt-8">Inicia sesión para guardar y ver tus meses.</p>
