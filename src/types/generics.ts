@@ -1,4 +1,10 @@
-export type Row = { label: string; amount: number };
+export type SubItem = { label: string; amount: number };
+
+export type Row = {
+  label: string;
+  amount: number;
+  breakdown?: SubItem[];
+};
 
 export type BudgetMonth = {
   incomes: Row[];
