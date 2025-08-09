@@ -4,6 +4,7 @@ import ExpensesDonut from "./GrafDonnut";
 import BreakdownEditor from "./BreakdownEditor";
 import MoneyInput from "./MoneyInput";
 import { formatEUR } from "../utils/money";
+import { Trash } from "lucide-react";
 
 const rowTotal = (r: Row) =>
   r.breakdown && r.breakdown.length > 0
@@ -21,13 +22,22 @@ const empty: BudgetMonth = {
     { label: "Transporte", amount: 0 },
     { label: "Gimnasio", amount: 0 },
     { label: "Tarjeta crédito", amount: 0 },
+    { label: "Suscripciones", amount: 0 },
   ],
   totals: { income: 0, expense: 0, remaining: 0 },
 };
 
 const expensePresets: Record<string, string[]> = {
   Vivienda: ["Renta", "Luz", "Agua", "Internet"],
-  Mercado: ["Pollo", "Cerdo", "Mercadona"],
+  Alimentación: ["Pollo", "Cerdo", "Mercadona"],
+  Suscripciones: [
+    "Disney",
+    "Netflix",
+    "Movistar",
+    "Prime",
+    "Antena3",
+    "ChatGPT",
+  ],
 };
 
 export function BudgetForm({
@@ -42,7 +52,19 @@ export function BudgetForm({
   const [saved, setSaved] = useState<null | "ok" | "error">(null);
 
   useEffect(() => {
-    setModel(initial ?? empty);
+    if (initial) {
+      setModel({
+        ...initial,
+        expenses: [
+          ...initial.expenses,
+          ...empty.expenses.filter(
+            (base) => !initial.expenses.some((e) => e.label === base.label)
+          ),
+        ],
+      });
+    } else {
+      setModel(empty);
+    }
   }, [initial]);
 
   const totals = useMemo(() => {
@@ -85,7 +107,7 @@ export function BudgetForm({
   };
 
   return (
-    <div className="mt-8 grid md:grid-cols-2 gap-8">
+    <div className="mt-2 grid md:grid-cols-2 gap-8">
       {/* Ingresos */}
       <section>
         <h2 className="font-semibold mb-2">Entrada de dinero</h2>
@@ -93,6 +115,7 @@ export function BudgetForm({
           {model.incomes.map((r, i) => (
             <div key={i} className="flex gap-2 items-center">
               <input
+                id={`concepto-income-${i}`}
                 value={r.label}
                 onChange={(e) => {
                   const v = e.target.value;
@@ -102,20 +125,20 @@ export function BudgetForm({
                     return c;
                   });
                 }}
-                className="flex-1 border rounded px-2 py-1"
+                className="flex-1 border rounded px-2 py-1 text-xs"
                 placeholder="Concepto"
               />
               <MoneyInput
                 value={r.amount}
                 onChangeNumber={(n) => setAmount("incomes", i, n)}
-                className="w-28"
+                className="w-28 text-xs"
               />
               <button
                 onClick={() => removeRow("incomes", i)}
                 className="text-red-500 hover:text-red-700"
                 title="Eliminar ingreso"
               >
-                🗑️
+                <Trash color="red" size={16} />
               </button>
             </div>
           ))}
@@ -137,10 +160,10 @@ export function BudgetForm({
             const presets = expensePresets[r.label] ?? [];
 
             return (
-              <div key={i} className="border rounded p-2 mb-2">
+              <div key={i} className="border-b-2 rounded p-2 mb-2">
                 <div className="flex gap-2 items-center">
                   <input
-                    className="flex-1 border rounded px-2 py-1"
+                    className="flex-1 border rounded px-2 py-1 text-xs"
                     value={r.label}
                     onChange={(e) => {
                       const v = e.target.value;
@@ -167,7 +190,7 @@ export function BudgetForm({
                           return c;
                         });
                       }}
-                      className="w-28"
+                      className="w-28 text-xs"
                     />
                   )}
 
@@ -176,7 +199,7 @@ export function BudgetForm({
                     className="text-red-500 hover:text-red-700"
                     title="Eliminar gasto"
                   >
-                    🗑️
+                    <Trash color="red" size={16} />
                   </button>
                 </div>
 
@@ -240,7 +263,7 @@ export function BudgetForm({
         )}
 
         <button
-          className="mt-6 px-4 py-2 rounded bg-black text-white"
+          className="mt-6 px-4 py-2 rounded bg-primary text-white"
           onClick={save}
           disabled={saving}
         >
@@ -253,9 +276,9 @@ export function BudgetForm({
 
 function Stat({ label, value }: { label: string; value: number }) {
   return (
-    <div className="border rounded p-4">
-      <div className="text-sm text-gray-500">{label}</div>
-      <div className="text-2xl font-bold">{formatEUR(value)}</div>
+    <div className="border rounded-xl p-4 bg-primary">
+      <div className="text-sm text-white">{label}</div>
+      <div className="text-2xl font-bold text-white">{formatEUR(value)}</div>
     </div>
   );
 }

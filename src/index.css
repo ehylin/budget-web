@@ -1,3 +1,37 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,600&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    /* Generics */
+    --background: #f4f5fb;
+    --foreground: #351520;
+    --icon: #5f5152;
+    --icon-fill: transparent;
+    --border: #5f5152;
+    --ring: transparent;
+
+    --radius: 0.5rem;
+    --tw-content: "";
+
+    /* Variants */
+    --primary: #7267ef;
+    --primary-active: #407eb1;
+    --primary-disabled: #d3d3d3;
+    --primary-focus: #80d1f6;
+    --primary-hover: #5da6d3;
+    --primary-border: #80d1f6;
+    --primary-border-active: #407eb1;
+    --primary-border-disabled: #d3d3d3;
+    --primary-border-focus: #80d1f6;
+    --primary-border-hover: #5da6d3;
+    --primary-foreground: #ffffff;
+    --primary-foreground-active: #ffffff;
+    --primary-foreground-disabled: #a8a8a8;
+    --primary-foreground-focus: #ffffff;
+    --primary-foreground-hover: #ffffff;
+  }
+}
