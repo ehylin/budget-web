@@ -18,7 +18,7 @@ export default function BreakdownEditor({
   };
 
   return (
-    <div className="mt-2 border rounded-md p-3 bg-gray-50">
+    <div className="mt-2 rounded-md p-3 bg-gray-50">
       <div className="flex flex-wrap gap-2 mb-2">
         {presets.map((p) => (
           <button
@@ -45,7 +45,7 @@ export default function BreakdownEditor({
       {local.map((it, i) => (
         <div key={i} className="flex gap-2 items-center mb-2">
           <input
-            className="flex-1 border rounded px-2 py-1"
+            className="flex-1 border rounded px-2 py-1 text-xs"
             placeholder="Concepto"
             value={it.label}
             onChange={(e) => {
@@ -57,7 +57,7 @@ export default function BreakdownEditor({
           <input
             type="number"
             step="0.01"
-            className="w-28 border rounded px-2 py-1 text-right"
+            className="w-28 border rounded px-2 py-1 text-right text-xs"
             value={it.amount}
             onChange={(e) => {
               const next = [...local];

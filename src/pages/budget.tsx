@@ -56,7 +56,7 @@ export default function BudgetPage() {
             />
             {user && (
               <button
-                className="ml-auto border px-3 py-1 rounded disabled:opacity-50"
+                className="ml-auto border px-3 py-1 rounded disabled:opacity-50 text-xs"
                 onClick={duplicateFromPrevious}
                 disabled={dupLoading}
               >

@@ -56,7 +56,7 @@ export default function ExpensesDonut({ expenses, height = 260 }: Props) {
   );
 
   return (
-    <div style={{ height }} className="w-full flex">
+    <div style={{ height }} className="w-full flex text-xs">
       <ResponsiveContainer width="50%" height="100%">
         <PieChart>
           <Pie
