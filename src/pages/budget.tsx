@@ -10,6 +10,8 @@ import { doc, getDoc } from "firebase/firestore";
 import type { DocumentSnapshot } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import type { BudgetMonth } from "../types/generics";
+import { projectToDefaults } from "../lib/budgetDefaults";
+import { sanitizeBudget } from "../lib/sanitize";
 
 function prevYm(ym: string) {
   const [y, m] = ym.split("-").map(Number);
@@ -35,7 +37,10 @@ export default function BudgetPage() {
       if (!snap.exists()) {
         alert(`No hay datos en ${p}`);
       } else {
-        await save(snap.data()!);
+        const prevMonth = snap.data()!;
+        // Solo duplicar las default y sin undefined
+        const cleanMonth = sanitizeBudget(projectToDefaults(prevMonth));
+        await save(cleanMonth);
       }
     } finally {
       setDupLoading(false);
@@ -44,7 +49,7 @@ export default function BudgetPage() {
 
   return (
     <div className="min-h-dvh bg-neutral-50 pb-20">
-      <main className="mx-auto max-w-3xl p-4 grid gap-4">
+      <main className="mx-auto max-w-3xl p-1 grid gap-4">
         <Card className="top-0 z-10 bg-white/90 backdrop-blur">
           <div className="flex items-center gap-3">
             <label className="text-sm">Mes</label>
