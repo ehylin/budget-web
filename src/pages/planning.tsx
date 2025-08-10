@@ -8,6 +8,7 @@ import type { Planning, Loan, Goal, Account } from "../types/planning";
 import LoanModal from "../components/planning/LoanCard";
 import GoalModal from "../components/planning/GoalCard";
 import AccountModal from "../components/planning/AccountsCard";
+import LoanSummary from "../components/planning/LoanSummary";
 
 export default function PlanningPage() {
   const [user] = useAuthState(auth);
@@ -145,10 +146,7 @@ export default function PlanningPage() {
                   </button>
                 </div>
               </div>
-              <div className="mt-2 text-sm text-gray-600">
-                Cuota {l.monthly} · Cuotas {l.installments} · Pagadas{" "}
-                {l.paidCount}
-              </div>
+              <LoanSummary loan={l} />
             </div>
           ))}
         </div>
