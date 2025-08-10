@@ -35,9 +35,9 @@ export function BudgetForm({
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState<null | "ok" | "error">(null);
 
-  // crear
+  // modal crear
   const [modalType, setModalType] = useState<"income" | "expense" | null>(null);
-  // editar
+  // modal editar
   const [editTarget, setEditTarget] = useState<EditTarget>(null);
 
   useEffect(() => {
@@ -57,6 +57,7 @@ export function BudgetForm({
       return copy;
     });
 
+  /** Crear: añade ingreso/gasto nuevo (con breakdown si viene del modal) */
   const handleAddTransaction = (type: "income" | "expense", item: Row) => {
     setModel((m) => {
       const copy: BudgetMonth = structuredClone(m);
@@ -76,6 +77,7 @@ export function BudgetForm({
     });
   };
 
+  /** Editar: pisa la fila con lo devuelto por el modal (incluye breakdown) */
   const handleEditSubmit = (row: Row) => {
     if (!editTarget) return;
     const key = editTarget.type === "income" ? "incomes" : "expenses";
@@ -111,7 +113,7 @@ export function BudgetForm({
     }
   };
 
-  // obtener la fila inicial al editar
+  /** Row inicial para el modal de edición (incluyendo breakdown) */
   const getInitialForEdit = (): Row | undefined => {
     if (!editTarget) return undefined;
     const key = editTarget.type === "income" ? "incomes" : "expenses";
@@ -139,10 +141,10 @@ export function BudgetForm({
           )}
 
           {model.incomes.map((r, i) => (
-            <div key={`${r.label}-${i}`} className="mb-3 ">
-              <div className="flex justify-between items-center border-b-2">
+            <div key={`${r.label}-${i}`} className="mb-3">
+              <div className="flex justify-between items-center border-b-2 pb-1">
                 <button
-                  className="font-medium text-left mb-1"
+                  className="font-medium text-left"
                   onClick={() => setEditTarget({ type: "income", index: i })}
                   title="Editar ingreso"
                 >
@@ -190,9 +192,9 @@ export function BudgetForm({
             return (
               <div key={`${r.label}-${i}`} className="mb-3">
                 {/* Fila principal */}
-                <div className="flex justify-between items-center border-b-2">
+                <div className="flex justify-between items-center border-b-2 pb-1">
                   <button
-                    className="font-medium text-left mb-1"
+                    className="font-medium text-left"
                     onClick={() => setEditTarget({ type: "expense", index: i })}
                     title="Editar gasto"
                   >
@@ -254,7 +256,6 @@ export function BudgetForm({
       />
 
       {/* Gráfica */}
-
       <ExpensesDonut expenses={model.expenses} height={200} />
 
       {/* Guardado */}
@@ -281,8 +282,7 @@ export function BudgetForm({
       {modalType && (
         <TransactionModal
           type={modalType}
-          mode="create"
-          isOpen={true}
+          isOpen
           onClose={() => setModalType(null)}
           onSubmit={(item) => handleAddTransaction(modalType, item)}
         />
@@ -292,7 +292,6 @@ export function BudgetForm({
       {editTarget && (
         <TransactionModal
           type={editTarget.type}
-          mode="edit"
           isOpen
           initial={getInitialForEdit()}
           onClose={() => setEditTarget(null)}
