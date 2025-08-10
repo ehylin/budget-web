@@ -254,9 +254,8 @@ export function BudgetForm({
       />
 
       {/* Gráfica */}
-      <div className="mt-6 w-full">
-        <ExpensesDonut expenses={model.expenses} />
-      </div>
+
+      <ExpensesDonut expenses={model.expenses} height={200} />
 
       {/* Guardado */}
       {saved === "ok" && (

@@ -49,7 +49,7 @@ export default function BudgetPage() {
 
   return (
     <div className="min-h-dvh bg-neutral-50 pb-20">
-      <main className="mx-auto max-w-3xl p-4 grid gap-4">
+      <main className="mx-auto max-w-3xl p-1 grid gap-4">
         <Card className="top-0 z-10 bg-white/90 backdrop-blur">
           <div className="flex items-center gap-3">
             <label className="text-sm">Mes</label>

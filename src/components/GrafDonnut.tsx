@@ -26,7 +26,7 @@ type Props = {
   height?: number;
 };
 
-export default function ExpensesDonut({ expenses, height = 260 }: Props) {
+export default function ExpensesDonut({ expenses, height }: Props) {
   const total = useMemo(
     () => expenses.reduce((sum, e) => sum + rowTotal(e), 0),
     [expenses]
