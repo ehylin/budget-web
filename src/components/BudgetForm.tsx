@@ -139,10 +139,10 @@ export function BudgetForm({
           )}
 
           {model.incomes.map((r, i) => (
-            <div key={`${r.label}-${i}`} className="mb-3">
-              <div className="flex justify-between items-center">
+            <div key={`${r.label}-${i}`} className="mb-3 ">
+              <div className="flex justify-between items-center border-b-2">
                 <button
-                  className="font-medium text-left"
+                  className="font-medium text-left mb-1"
                   onClick={() => setEditTarget({ type: "income", index: i })}
                   title="Editar ingreso"
                 >
@@ -190,9 +190,9 @@ export function BudgetForm({
             return (
               <div key={`${r.label}-${i}`} className="mb-3">
                 {/* Fila principal */}
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center border-b-2">
                   <button
-                    className="font-medium text-left"
+                    className="font-medium text-left mb-1"
                     onClick={() => setEditTarget({ type: "expense", index: i })}
                     title="Editar gasto"
                   >

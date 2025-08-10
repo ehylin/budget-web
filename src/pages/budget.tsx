@@ -12,6 +12,7 @@ import { db } from "../lib/firebase";
 import type { BudgetMonth } from "../types/generics";
 import { projectToDefaults } from "../lib/budgetDefaults";
 import { sanitizeBudget } from "../lib/sanitize";
+import PlanningPage from "./planning";
 
 function prevYm(ym: string) {
   const [y, m] = ym.split("-").map(Number);
@@ -86,12 +87,18 @@ export default function BudgetPage() {
         )}
 
         {tab === "plan" && (
-          <Card>
-            <h2 className="font-semibold mb-2">Planificación</h2>
-            <p className="text-sm text-gray-600">
-              Aquí pondremos metas, sobres y objetivos (próximamente).
-            </p>
-          </Card>
+          <>
+            <Card>
+              <h2 className="font-semibold mb-2">Planificación</h2>
+              <p className="text-sm text-gray-600">
+                Aquí pondremos metas, sobres y objetivos.
+              </p>
+            </Card>
+
+            <div className="mt-4">
+              <PlanningPage />
+            </div>
+          </>
         )}
 
         {tab === "stats" && (
