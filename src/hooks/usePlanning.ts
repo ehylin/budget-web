@@ -45,6 +45,11 @@ export function usePlanning(uid?: string, ym?: string) {
         })),
       })),
       accounts: p.accounts.map((a) => ({ ...a, balance: a.balance ?? 0 })),
+      savingsGoal: p.savingsGoal ?? 0,
+      savingsEntries: (p.savingsEntries ?? []).map((e) => ({
+        ym: e.ym,
+        amount: e.amount ?? 0,
+      })),
       updatedAt: Date.now(),
     };
     await setDoc(ref, clean, { merge: false });

@@ -23,9 +23,13 @@ export type Account = {
   balance: number;
 };
 
+export type SavingsEntry = { ym: string; amount: number };
+
 export type Planning = {
   loans: Loan[];
   goals: Goal[];
   accounts: Account[];
+  savingsGoal?: number;
+  savingsEntries?: SavingsEntry[];
   updatedAt: number;
 };

@@ -1,13 +1,7 @@
-import Header from "./components/Header";
-import BudgetPage from "./pages/budget";
+import FinancePage from "./pages/FinancePage";
 
 function App() {
-  return (
-    <>
-      <Header />
-      <BudgetPage />
-    </>
-  );
+  return <FinancePage />;
 }
 
 export default App;
